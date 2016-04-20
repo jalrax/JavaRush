@@ -3,17 +3,15 @@ package com.javarush.test.level26.lesson15.big01;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by repin.s on 18.04.2016.
- */
 public class CurrencyManipulator
 {
-    private String currencyCode;
-    private Map<Integer, Integer> denominations = new HashMap<>();
+    public String currencyCode;
+    public Map<Integer, Integer> denominations;
 
     public CurrencyManipulator(String currencyCode)
     {
         this.currencyCode = currencyCode;
+        denominations = new HashMap<>();
     }
 
     public String getCurrencyCode()
@@ -25,19 +23,33 @@ public class CurrencyManipulator
     {
         if (denominations.containsKey(denomination))
         {
-            denominations.put(denomination, denominations.get(denomination) + count);
-        } else
-        {
-            denominations.put(denomination, count);
+            count += denominations.get(denomination);
         }
+        denominations.put(denomination, count);
     }
 
     public int getTotalAmount()
     {
         int result = 0;
         for (Map.Entry<Integer, Integer> pair : denominations.entrySet())
-            result = result + (pair.getKey() * pair.getValue());
+        {
+            result += pair.getKey() * pair.getValue();
+        }
 
+        return result;
+    }
+
+    public boolean hasMoney()
+    {
+        boolean result = false;
+
+        for (Map.Entry<Integer, Integer> pair : denominations.entrySet())
+        {
+            if (pair.getValue() != 0)
+            {
+                result = true;
+            }
+        }
         return result;
     }
 }

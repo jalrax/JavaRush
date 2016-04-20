@@ -1,15 +1,13 @@
 package com.javarush.test.level26.lesson15.big01;
 
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by repin.s on 18.04.2016.
- */
-public final class CurrencyManipulatorFactory
+public class CurrencyManipulatorFactory
 {
-    static Map<String, CurrencyManipulator> map = new HashMap<>();
-    static boolean isExist = false;
+    static final private Map<String, CurrencyManipulator> manipulators = new HashMap<>();
 
     private CurrencyManipulatorFactory()
     {
@@ -17,17 +15,17 @@ public final class CurrencyManipulatorFactory
 
     public static CurrencyManipulator getManipulatorByCurrencyCode(String currencyCode)
     {
-        isExist = false;
-        CurrencyManipulator current;
-
-        if (map.containsKey(currencyCode))
-            return map.get(currencyCode);
-        else
+        if (!manipulators.containsKey(currencyCode))
         {
-            current = new CurrencyManipulator(currencyCode);
-            map.put(currencyCode, current);
-            return current;
+            manipulators.put(currencyCode, new CurrencyManipulator(currencyCode));
         }
+        return manipulators.get(currencyCode);
     }
+
+    public static Collection<CurrencyManipulator> getAllCurrencyManipulators()
+    {
+        return manipulators.values();
+    }
+
 
 }

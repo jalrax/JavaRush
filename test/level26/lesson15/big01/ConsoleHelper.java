@@ -1,15 +1,12 @@
 package com.javarush.test.level26.lesson15.big01;
 
 
+import com.javarush.test.level26.lesson15.big01.exception.InterruptOperationException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-/**
- * Created by repin.s on 18.04.2016.
- */
 public class ConsoleHelper
 {
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -19,88 +16,84 @@ public class ConsoleHelper
         System.out.println(message);
     }
 
-    public static String readString()
+    public static String readString() throws InterruptOperationException
     {
-        String s = "";
+        String result = null;
         try
         {
-            s = reader.readLine();
+            result = reader.readLine();
         }
-        catch (IOException e)
+        catch (IOException ignored)
         {
         }
-        return s;
+
+        if ("exit".equalsIgnoreCase(result))
+        {
+            throw new InterruptOperationException();
+        }
+        return result;
     }
 
-
-    public static String askCurrencyCode()
+    public static String askCurrencyCode() throws InterruptOperationException
     {
-        String askCode;
-
-        writeMessage("Input currency code:");
-
-        askCode = readString();
-
-        while (askCode.length() != 3) // Проверка на корректность
+        writeMessage("Input currency code, please...");
+        String result = "";
+        result = readString();
+        if (result.length() != 3)
         {
-            writeMessage("Wrong currency code. Input currency code:");
-
-            askCode = readString();
+            writeMessage("You put wrong currency code. Try Again...");
+            result = askCurrencyCode();
         }
-
-        return askCode.toUpperCase();
+        return result.toUpperCase();
     }
 
-
-    public static String[]
-    getValidTwoDigits(String currencyCode)
+    public static String[] getValidTwoDigits(String currencyCode) throws InterruptOperationException
     {
-        writeMessage("Input your denomination and count money:");
-        String massive = "";
-        String[] arg = massive.split(" ");
-        while (true)
+        writeMessage("Input denomination and amount, please...");
+        String[] result;
+        try
         {
-            try
+            result = readString().trim().split(" ");
+            if (result.length != 2 || Integer.parseInt(result[0]) <= 0 || Integer.parseInt(result[1]) < 0)
             {
-                massive = readString();
-                arg = massive.split(" ");
-                Integer currency = Integer.valueOf(arg[0]);
-                Integer number = Integer.valueOf(arg[1]);
-
-                if (arg.length != 2 || currency < 0 || number < 0)
-                {
-                    writeMessage("try again");
-                    continue;
-                } else
-                    break;
-
-            }
-            catch (Exception o)
-            {
-                writeMessage("try again");
-                continue;
+                writeMessage("You put wrong denomination and amount. Try Again...");
+                result = getValidTwoDigits(currencyCode);
             }
         }
-        return arg;
-    }
-
-    public static Operation askOperation()
-    {
-        while (true)
+        catch (NumberFormatException e)
         {
-            String line = readString();
-            if (checkWithRegExp(line))
-                return Operation.getAllowableOperationByOrdinal(Integer.parseInt(line));
-            else
-                writeMessage("invalid.data");
+            writeMessage("You put wrong denomination and amount. Try Again...");
+            result = getValidTwoDigits(currencyCode);
         }
 
+        return result;
     }
 
-    public static boolean checkWithRegExp(String Name)
+    public static Operation askOperation() throws InterruptOperationException
     {
-        Pattern p = Pattern.compile("^[1-4]$");
-        Matcher m = p.matcher(Name);
-        return m.matches();
+        writeMessage("Input code of Operation pls 1 - INFO, 2 - DEPOSIT, 3 - WITHDRAW, 4 - EXIT");
+        int numbOperation = -1;
+        Operation result;
+        try
+        {
+            numbOperation = Integer.parseInt(readString());
+        }
+        catch (NumberFormatException e)
+        {
+            writeMessage("You input not a code! Try Again.");
+            result = askOperation();
+        }
+
+        try
+        {
+            result = Operation.getAllowableOperationByOrdinal(numbOperation);
+        }
+        catch (IllegalArgumentException e)
+        {
+            writeMessage("You input wrong code! Try Again.");
+            result = askOperation();
+        }
+
+        return result;
     }
 }
