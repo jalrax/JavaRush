@@ -18,20 +18,17 @@ public class ConsoleHelper
 
     public static String readString() throws InterruptOperationException
     {
-        String result = null;
+        String line = null;
         try
         {
-            result = reader.readLine();
+            line = reader.readLine();
+            if ("EXIT".equalsIgnoreCase(line))
+                throw new InterruptOperationException();
         }
-        catch (IOException ignored)
+        catch (IOException e)
         {
         }
-
-        if ("exit".equalsIgnoreCase(result))
-        {
-            throw new InterruptOperationException();
-        }
-        return result;
+        return line;
     }
 
     public static String askCurrencyCode() throws InterruptOperationException
@@ -71,8 +68,8 @@ public class ConsoleHelper
 
     public static Operation askOperation() throws InterruptOperationException
     {
-        writeMessage("Input code of Operation pls 1 - INFO, 2 - DEPOSIT, 3 - WITHDRAW, 4 - EXIT");
-        int numbOperation = -1;
+        writeMessage("Input code of Operation: 1 - INFO, 2 - DEPOSIT, 3 - WITHDRAW, 4 - EXIT");
+        int numbOperation = 0;
         Operation result;
         try
         {

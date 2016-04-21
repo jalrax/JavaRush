@@ -1,3 +1,4 @@
+
 package com.javarush.test.level26.lesson15.big01.command;
 
 
@@ -9,23 +10,22 @@ import java.util.Map;
 
 public class CommandExecutor
 {
-    private static Map<Operation, Command> commands;
-
+    private static Map<Operation, Command> map = new HashMap<>();
     static
     {
-        commands = new HashMap<>();
-        commands.put(Operation.DEPOSIT, new DepositCommand());
-        commands.put(Operation.INFO, new InfoCommand());
-        commands.put(Operation.WITHDRAW, new WithdrawCommand());
-        commands.put(Operation.EXIT, new ExitCommand());
+        map.put(Operation.INFO, new InfoCommand());
+        map.put(Operation.DEPOSIT, new DepositCommand());
+        map.put(Operation.WITHDRAW, new WithdrawCommand());
+        map.put(Operation.EXIT, new ExitCommand());
     }
 
-    private CommandExecutor()
+    public CommandExecutor()
     {
     }
 
     public static final void execute(Operation operation) throws InterruptOperationException
     {
-        commands.get(operation).execute();
+        map.get(operation).execute();
     }
+
 }

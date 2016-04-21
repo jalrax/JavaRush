@@ -12,11 +12,12 @@ class ExitCommand implements Command
     @Override
     public void execute() throws InterruptOperationException
     {
-        ConsoleHelper.writeMessage("Do you really want to exit? <y,n>");
-        String answer = ConsoleHelper.readString();
-        if (answer.equalsIgnoreCase("y"))
+        ConsoleHelper.writeMessage("Are you sure want to quit? (y,n):");
+        String answer;
+        answer = ConsoleHelper.readString();
+        if ("y".equalsIgnoreCase(answer))
         {
-            ConsoleHelper.writeMessage("Bye!");
+            ConsoleHelper.writeMessage("Bye");
         }
     }
 }
