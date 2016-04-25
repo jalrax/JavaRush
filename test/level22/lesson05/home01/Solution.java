@@ -44,6 +44,23 @@ public class Solution
 
     public String getPartOfString(String string, String threadName)
     {
-        return null;
+        String result;
+        try
+        {
+            result = string.substring(string.indexOf("\t") + 1, string.lastIndexOf("\t"));
+        }
+        catch (StringIndexOutOfBoundsException e)
+        {
+            switch (threadName)
+            {
+                case FIRST_THREAD_NAME:
+                    throw new TooShortStringFirstThreadException();
+                case SECOND_THREAD_NAME:
+                    throw new TooShortStringSecondThreadException();
+                default:
+                    throw new RuntimeException(e);
+            }
+        }
+        return result;
     }
 }
