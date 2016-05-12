@@ -1,10 +1,7 @@
 package com.javarush.test.level30.lesson04.home01;
 
-import com.oracle.jrockit.jfr.Producer;
-
 import java.util.concurrent.LinkedTransferQueue;
 import java.util.concurrent.TransferQueue;
-import java.util.function.Consumer;
 
 /* Экономим время
 1. Создайте Producer и Consumer (См. комментарий к методу main)
@@ -40,7 +37,7 @@ public class Solution
     {
         TransferQueue<ShareItem> queue = new LinkedTransferQueue<>();
 
-        Thread producer = new Thread(new Producer(queue));
+        /*Thread producer = new Thread(new Producer(queue));
         Thread consumer = new Thread(new Consumer(queue));
         producer.start();
         consumer.start();
@@ -48,7 +45,7 @@ public class Solution
         Thread.sleep(1500);
 
         producer.interrupt();
-        consumer.interrupt();
+        consumer.interrupt();*/
     }
 
 }
