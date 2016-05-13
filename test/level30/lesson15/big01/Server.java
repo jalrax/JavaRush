@@ -29,6 +29,26 @@ public class Server
         }
     }
 
+    public static void main(String[] args)
+    {
+
+        ConsoleHelper.writeMessage("Введите порт сервера:");
+        int port = ConsoleHelper.readInt();
+        try (ServerSocket serverSocket = new ServerSocket(port))
+        {
+            ConsoleHelper.writeMessage("Сервер запущен на порту: " + port);
+            while (true)
+            {
+                Socket socket = serverSocket.accept();
+                new Handler(socket).start();
+            }
+        }
+        catch (IOException e)
+        {
+            ConsoleHelper.writeMessage(e.getMessage());
+        }
+    }
+
     private static class Handler extends Thread
     {
 
@@ -40,25 +60,6 @@ public class Server
             this.socket = socket;
         }
 
-        public static void main(String[] args)
-        {
-
-            ConsoleHelper.writeMessage("Введите порт сервера:");
-            int port = ConsoleHelper.readInt();
-            try (ServerSocket serverSocket = new ServerSocket(port))
-            {
-                ConsoleHelper.writeMessage("Сервер запущен на порту: " + port);
-                while (true)
-                {
-                    Socket socket = serverSocket.accept();
-                    new Handler(socket).start();
-                }
-            }
-            catch (IOException e)
-            {
-                ConsoleHelper.writeMessage(e.getMessage());
-            }
-        }
 
         public void run()
         {
